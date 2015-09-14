@@ -10,6 +10,7 @@ import sys
 import pyaudio
 import numpy
 import threading
+from usuario import Usuario
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
@@ -22,9 +23,32 @@ class Servidor:
         self.frames = []
         self.videoinicia = 1
         self.creaHiloVideo()
+        self.usuarios = list()
+        self.ipEntrante = 'NO'
     
     def ping(self):
         return True
+    
+    #Ponemos la ip del usuario que quiere conectarse.
+    def setMiIp(self,ipEntrante): 
+        self.ipEntrante = ipEntrante
+    def getMiIp(self):
+        return self.ipEntrante        
+
+    def setUsuario(self,usr,ip):
+        usr = Usuario(usr,ip)
+        self.usuarios.append(usr)
+    
+    def removeUsuario(self,ip1):
+        for m in self.usuarios[:]:
+           if(ip1==m.getIp()):
+                self.usuarios.remove(m)
+
+    def getAll(self):
+        cat = ''
+        for m in self.usuarios:
+           cat = cat +'\n'+m.getUsr()+'-'+m.getIp()+','
+        return cat        
     
     def enviarMensaje(self,msj):
         self.buffer.append(msj)

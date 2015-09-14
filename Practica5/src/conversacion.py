@@ -5,16 +5,16 @@ from PyQt4.Qt import *
 import threading
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
-from servidorCentral import VentanaServidor #despliega la tabla de los usuarios
-from servidorGeneral import ServidorCentral #servidor que escuchara las peticiones de los demas
-from servidor import Servidor 
+from servidor import Servidor
 import xmlrpclib
+from cliente import Bob
+import pyaudio
 
 
 class RequestHandler(SimpleXMLRPCRequestHandler):
     rpc_paths = ('/RPC2',)
 
-main_class = uic.loadUiType("inicio.ui")[0]
+main_class = uic.loadUiType("login.ui")[0]
 
 class Ventana(QMainWindow,main_class):
 	def __init__(self, parent=None):
@@ -26,41 +26,32 @@ class Ventana(QMainWindow,main_class):
 	def OK(self):
 		usuario = str(self.text_usser.toPlainText())
 		ip1 = str(self.text_ip1.toPlainText())
-		servidor= str(self.text_ip2.toPlainText())
-			
-		if(ip1==servidor):
-			self.hiloSer = threading.Thread(target=self.IniciaServidor,args=(ip1,))
-			self.hiloSer.start()
-		#cargar servidor de peticiones
-		self.hiloServidorPrivado = threading.Thread(target=self.IniciaServidorPrivado,args=(ip1,))
-		self.hiloServidorPrivado.start()
-		#cargar interfaz			
-		self.s = VentanaServidor(usuario,ip1,servidor)
-		self.s.show()
+		ip2 = str(self.text_ip2.toPlainText())
+		usuario = 'Jose'
+		ip1 = 'localhost'
+		ip2 = 'localhost'
+		self.hiloSer = threading.Thread(target=self.IniciaServidor,args=(ip1,))
+		self.hiloSer.start()
+		self.c = Bob(usuario,ip1,ip2)
 		self.hide()
-
-	def IniciaServidorPrivado(self,ip1):
-		server = SimpleXMLRPCServer((ip1, 8000),requestHandler=RequestHandler,allow_none=True)
-		server.register_introspection_functions()
-		server.register_instance(Servidor())
-		try:
-			server.serve_forever()
-			print 'Use Control-C to exit'
-		except KeyboardInterrupt:
-			print 'Exiting'			
 
 	
 	def IniciaServidor(self,ip1):
 		server = SimpleXMLRPCServer((ip1, 8000),requestHandler=RequestHandler,allow_none=True)
 		server.register_introspection_functions()
-		server.register_instance(ServidorCentral())
+		server.register_instance(Servidor())
 		print "Listening on port 8000..."
 		try:
 			server.serve_forever()
 			print 'Use Control-C to exit'
 		except KeyboardInterrupt:
 			print 'Exiting'			
-	
+		'''
+		try:
+			print 'Use Control-C to exit'
+    	except KeyboardInterrupt:
+    		print 'Exiting'
+'''
 						  
 	
 class App(QApplication):
