@@ -1,3 +1,8 @@
+Integrantes 
+
+José Enrique Vargas Benitez 308299966
+Marco Antonio Bravo Garcia  308037056
+
 Ejecutar el programa con python inicio.py
 
 *Solicita su usuario, su propia ip , y la del servidor a la que se conectara
