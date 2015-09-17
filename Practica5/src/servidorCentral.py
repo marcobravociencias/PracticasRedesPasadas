@@ -24,29 +24,34 @@ class VentanaServidor(QMainWindow,main_class):
 		self.usr = usuario
 		self.ip1 = ip1
 		self.ipServidor = ipServidor
-		#Generamos un proxy
-		self.proxy = xmlrpclib.ServerProxy("http://"+self.ipServidor+":8000",allow_none=True) 
+		self.puerto = 8001
+		#Generamos un proxy para mandar la informacion al servidor
+		conexion = "http://"+self.ipServidor+":"+str(self.puerto)
+		self.proxy = xmlrpclib.ServerProxy(conexion,allow_none=True) 
+		#Agregamos un nuevo usuario
 		self.proxy.setUsuario(self.usr,self.ip1)
 		self.conec.clicked.connect(self.conectar)
 		self.desc.clicked.connect(self.desconectar)
 		#Headers
-		self.header(0)		
 		self.max = -1
-		self.Escuchar = threading.Thread(target=self.EscuchaPeticion)
+		self.actualizar()
+ 		self.Escuchar = threading.Thread(target=self.EscuchaPeticion)
 		self.Escuchar.start()
- 
+	
+	#Se dedica a escuchar si hay una ip que quiere conversar con el		
 	def EscuchaPeticion(self):
 		while True:
 			time.sleep(1)
 			server = xmlrpclib.ServerProxy("http://"+self.ip1+":8000",allow_none=True) 
-			ip = server.getMiIp()
-			if(ip!='NO'):
-				server.setMiIp('NO') #Mandamos nuestra ip al otro usuario
-				self.c = Bob(self.usuario,self.ip1,ip) #ponemos la ip que desea conectarse
+			ipOtro = server.getTuIp()
+			print 'IP de otra persona '+str(ipOtro)
+			if(ipOtro!='disponible'):
+				server.setMiIp('disponible') #Marcamos la ip como disponible
+				self.c = Bob(self.usr,self.ip1,ipOtro) #ponemos la ip que desea conectarse
 				self.c.show()
-
+	#Se borra del servidor con su ip el usuario.				
 	def desconectar(self):
-		self.proxy.removeUsuario(self.ip1)
+		self.proxy.removeUsuario(self.usr,self.ip1)
 		
  
 	def actualizar(self):
@@ -55,37 +60,45 @@ class VentanaServidor(QMainWindow,main_class):
 		cont = 0
 		self.header(len(cadena))
 		self.max = len(cadena)
+		if(len(cadena)==1): #solo hay una persona
+			return
 		for i in cadena:
 			subCadena = i.split('-')
-			usr = QtGui.QLineEdit(subCadena[0])
-			self.tableWidget.setItem(cont, 0, QtGui.QTableWidgetItem(usr.text()))
-			ip = QtGui.QLineEdit(subCadena[1])
-			self.tableWidget.setItem(cont, 1, QtGui.QTableWidgetItem(ip.text()))
-			cont = cont+1
+			if(len(subCadena)==1):
+				return
+			ip = QtGui.QLineEdit(subCadena[1]).text()
+			usr = QtGui.QLineEdit(subCadena[0]).text()
+			print 'usuario '+self.usr+' - '+usr+' Hizo salto de renglon'
+			if((self.usr!=usr[:1])):# and self.ip1!=ip.text()) or True):
+				self.tableWidget.setItem(cont, 0, QtGui.QTableWidgetItem(usr[:1]))
+				self.tableWidget.setItem(cont, 1, QtGui.QTableWidgetItem(ip[:1]))
+				cont = cont+1
+		
 	
+	#Contectamos con el otro usuario
 	def conectar(self):
 		
 		if(self.max<0):
 			return
-		id_row = int(str(self.id_row.toPlainText())) #obtenemos el di con el que deseamos conectar
+		id_row = int(str(self.id_row.toPlainText()))-1 #obtenemos el di con el que deseamos conectar
 		if(self.max<id_row or id_row < 0):
 			return
 		#Recuperamos info
 		usuario = str(self.tableWidget.item(id_row,0).text())
 		ip =  str(self.tableWidget.item(id_row,1).text())
-		print usuario+' '+ip
+		print 'Conectando con '+usuario+' '+ip
 		##self.usuario mia
 		#self.ip mia
 		server = xmlrpclib.ServerProxy("http://"+ip+":8000",allow_none=True)
 		server.setMiIp(self.ip1) #Mandamos nuestra ip al otro usuario
-		self.c = Bob(self.usuario,self.ip1,ip) #ponemos la ip que desea conectarse
+		self.c = Bob(self.usr,self.ip1,ip) #ponemos la ip que desea conectarse
 		self.c.show()
 
 
 
-		
+	#Encabezados de la tabla Usuario | IP 	
 	def header(self,row):						  
-		self.tableWidget.setRowCount(row)
+		self.tableWidget.setRowCount(row-1)
 		self.tableWidget.setColumnCount(2)
 		header = (QStringList() << 'Usuario' << 'Direccion IP')
 		self.tableWidget.setHorizontalHeaderLabels(header)

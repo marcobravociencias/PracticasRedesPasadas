@@ -24,7 +24,7 @@ class Servidor:
         self.videoinicia = 1
         self.creaHiloVideo()
         self.usuarios = list()
-        self.ipEntrante = 'NO'
+        self.ipEntrante = 'disponible'
     
     def ping(self):
         return True
@@ -32,17 +32,17 @@ class Servidor:
     #Ponemos la ip del usuario que quiere conectarse.
     def setMiIp(self,ipEntrante): 
         self.ipEntrante = ipEntrante
-    def getMiIp(self):
+    def getTuIp(self):
         return self.ipEntrante        
 
     def setUsuario(self,usr,ip):
         usr = Usuario(usr,ip)
         self.usuarios.append(usr)
     
-    def removeUsuario(self,ip1):
+    def removeUsuario(self,ip1,usr):
         for m in self.usuarios[:]:
-           if(ip1==m.getIp()):
-                self.usuarios.remove(m)
+           if(usr==m.getUsr() and ip1==m.getIp()):
+            self.usuarios.remove(m)
 
     def getAll(self):
         cat = ''

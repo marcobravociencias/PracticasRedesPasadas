@@ -6,7 +6,7 @@ import threading
 from SimpleXMLRPCServer import SimpleXMLRPCServer
 from SimpleXMLRPCServer import SimpleXMLRPCRequestHandler
 from servidorCentral import VentanaServidor #despliega la tabla de los usuarios
-from servidorGeneral import ServidorCentral #servidor que escuchara las peticiones de los demas
+#from servidorGeneral import ServidorCentral #servidor que escuchara las peticiones de los demas
 from servidor import Servidor 
 import xmlrpclib
 
@@ -27,14 +27,12 @@ class Ventana(QMainWindow,main_class):
 		usuario = str(self.text_usser.toPlainText())
 		ip1 = str(self.text_ip1.toPlainText())
 		servidor= str(self.text_ip2.toPlainText())
-			
-		if(ip1==servidor):
-			self.hiloSer = threading.Thread(target=self.IniciaServidor,args=(ip1,))
-			self.hiloSer.start()
+		ip1 = 'localhost'
+		servidor = 'localhost'
 		#cargar servidor de peticiones
 		self.hiloServidorPrivado = threading.Thread(target=self.IniciaServidorPrivado,args=(ip1,))
 		self.hiloServidorPrivado.start()
-		#cargar interfaz			
+		#cargar interfaz
 		self.s = VentanaServidor(usuario,ip1,servidor)
 		self.s.show()
 		self.hide()
@@ -49,17 +47,6 @@ class Ventana(QMainWindow,main_class):
 		except KeyboardInterrupt:
 			print 'Exiting'			
 
-	
-	def IniciaServidor(self,ip1):
-		server = SimpleXMLRPCServer((ip1, 8000),requestHandler=RequestHandler,allow_none=True)
-		server.register_introspection_functions()
-		server.register_instance(ServidorCentral())
-		print "Listening on port 8000..."
-		try:
-			server.serve_forever()
-			print 'Use Control-C to exit'
-		except KeyboardInterrupt:
-			print 'Exiting'			
 	
 						  
 	
