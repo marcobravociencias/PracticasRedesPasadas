@@ -22,10 +22,10 @@ class funcionesServidorGeneral():
         usr = Usuario(usr,ip)
         self.usuarios.append(usr)
     
-    def removeUsuario(self,ip1):
+    def removeUsuario(self,ip1,usr):
         for m in self.usuarios[:]:
-           if(ip1==m.getIp()):
-                self.usuarios.remove(m)
+           if(usr==m.getUsr() and ip1==m.getIp()):
+            self.usuarios.remove(m)
 
     def getAll(self):
         cat = ''

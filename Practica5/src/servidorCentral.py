@@ -67,11 +67,11 @@ class VentanaServidor(QMainWindow,main_class):
 			if(len(subCadena)==1):
 				return
 			ip = QtGui.QLineEdit(subCadena[1]).text()
-			usr = QtGui.QLineEdit(subCadena[0]).text()
+			usr = QtGui.QLineEdit(subCadena[0]).text()[1:]
 			print 'usuario '+self.usr+' - '+usr+' Hizo salto de renglon'
 			if((self.usr!=usr[:1])):# and self.ip1!=ip.text()) or True):
-				self.tableWidget.setItem(cont, 0, QtGui.QTableWidgetItem(usr[:1]))
-				self.tableWidget.setItem(cont, 1, QtGui.QTableWidgetItem(ip[:1]))
+				self.tableWidget.setItem(cont, 0, QtGui.QTableWidgetItem(usr))
+				self.tableWidget.setItem(cont, 1, QtGui.QTableWidgetItem(ip))
 				cont = cont+1
 		
 	
@@ -87,14 +87,16 @@ class VentanaServidor(QMainWindow,main_class):
 		usuario = str(self.tableWidget.item(id_row,0).text())
 		ip =  str(self.tableWidget.item(id_row,1).text())
 		print 'Conectando con '+usuario+' '+ip
-		##self.usuario mia
-		#self.ip mia
-		server = xmlrpclib.ServerProxy("http://"+ip+":8000",allow_none=True)
-		server.setMiIp(self.ip1) #Mandamos nuestra ip al otro usuario
+		
+		self.hiloServidorOtro = threading.Thread(target=self.mandarIp,args=(ip,))
+		self.hiloServidorOtro.start()
 		self.c = Bob(self.usr,self.ip1,ip) #ponemos la ip que desea conectarse
 		self.c.show()
-
-
+	
+	def mandarIp(self,ipconectar):
+		server = xmlrpclib.ServerProxy("http://"+ipconectar+":8000",allow_none=True)
+		server.setMiIp(self.ip1) #Mandamos nuestra ip al otro usuario
+		
 
 	#Encabezados de la tabla Usuario | IP 	
 	def header(self,row):						  
