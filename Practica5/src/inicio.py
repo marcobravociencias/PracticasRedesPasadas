@@ -22,7 +22,7 @@ class Ventana(QMainWindow,main_class):
 		self.setupUi(self)
 		self.boton_login.clicked.connect(self.OK)
 				
- 
+ 	#Aceptamos la peticion del usuario obteniendo todos los datos proporcionados
 	def OK(self):
 		usuario = str(self.text_usser.toPlainText())
 		ip1 = str(self.text_ip1.toPlainText())
@@ -37,6 +37,7 @@ class Ventana(QMainWindow,main_class):
 		self.s.show()
 		self.hide()
 
+	#Ejejcutamos un servidor para escuchar peticiones que llegan de conversaciones
 	def IniciaServidorPrivado(self,ip1):
 		server = SimpleXMLRPCServer((ip1, 8000),requestHandler=RequestHandler,allow_none=True)
 		server.register_introspection_functions()

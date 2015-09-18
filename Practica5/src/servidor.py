@@ -40,9 +40,12 @@ class Servidor:
         self.usuarios.append(usr)
     
     def removeUsuario(self,ip1,usr):
+        var = False
         for m in self.usuarios[:]:
-           if(usr==m.getUsr() and ip1==m.getIp()):
-            self.usuarios.remove(m)
+            if(usr==m.getUsr() and ip1==m.getIp()):
+                self.usuarios.remove(m)
+                var = True
+        return var             
 
     def getAll(self):
         cat = ''

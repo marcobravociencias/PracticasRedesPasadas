@@ -22,11 +22,16 @@ class funcionesServidorGeneral():
         usr = Usuario(usr,ip)
         self.usuarios.append(usr)
     
+    #quita un usuario que coincida
     def removeUsuario(self,ip1,usr):
+        var = False
         for m in self.usuarios[:]:
-           if(usr==m.getUsr() and ip1==m.getIp()):
-            self.usuarios.remove(m)
+            if(usr==m.getUsr() and ip1==m.getIp()):
+                self.usuarios.remove(m)
+                var = True
+        return var             
 
+    #obtiene la lista de ip y de usuarios
     def getAll(self):
         cat = ''
         for m in self.usuarios:

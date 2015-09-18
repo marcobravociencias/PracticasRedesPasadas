@@ -49,11 +49,14 @@ class VentanaServidor(QMainWindow,main_class):
 				server.setMiIp('disponible') #Marcamos la ip como disponible
 				self.c = Bob(self.usr,self.ip1,ipOtro) #ponemos la ip que desea conectarse
 				self.c.show()
+
 	#Se borra del servidor con su ip el usuario.				
 	def desconectar(self):
-		self.proxy.removeUsuario(self.usr,self.ip1)
+		print self.proxy.removeUsuario(self.usr,self.ip1)
+		print 'Desconectando a '+self.usr+' '+self.ip1
 		
- 
+		
+ 	#Actualizamos la tabla con las peticiones que llegan al servidor general
 	def actualizar(self):
 		self.tableWidget.clear()
 		cadena = self.proxy.getAll().split(',') # obtenemos un arreglo con usuarios y sus ips
@@ -69,7 +72,7 @@ class VentanaServidor(QMainWindow,main_class):
 			ip = QtGui.QLineEdit(subCadena[1]).text()
 			usr = QtGui.QLineEdit(subCadena[0]).text()[1:]
 			print 'usuario '+self.usr+' - '+usr+' Hizo salto de renglon'
-			if((self.usr!=usr[:1])):# and self.ip1!=ip.text()) or True):
+			if(self.usr!=usr and cont<self.max):# and self.ip1!=ip.text()) or True):
 				self.tableWidget.setItem(cont, 0, QtGui.QTableWidgetItem(usr))
 				self.tableWidget.setItem(cont, 1, QtGui.QTableWidgetItem(ip))
 				cont = cont+1
@@ -86,13 +89,13 @@ class VentanaServidor(QMainWindow,main_class):
 		#Recuperamos info
 		usuario = str(self.tableWidget.item(id_row,0).text())
 		ip =  str(self.tableWidget.item(id_row,1).text())
-		print 'Conectando con '+usuario+' '+ip
 		
 		self.hiloServidorOtro = threading.Thread(target=self.mandarIp,args=(ip,))
 		self.hiloServidorOtro.start()
 		self.c = Bob(self.usr,self.ip1,ip) #ponemos la ip que desea conectarse
 		self.c.show()
 	
+	#Mandamos la ip al servidor privado con el que vamos a conectar
 	def mandarIp(self,ipconectar):
 		server = xmlrpclib.ServerProxy("http://"+ipconectar+":8000",allow_none=True)
 		server.setMiIp(self.ip1) #Mandamos nuestra ip al otro usuario
