@@ -27,8 +27,6 @@ class Ventana(QMainWindow,main_class):
 		usuario = str(self.text_usser.toPlainText())
 		ip1 = str(self.text_ip1.toPlainText())
 		servidor= str(self.text_ip2.toPlainText())
-		ip1 = 'localhost'
-		servidor = 'localhost'
 		#cargar servidor de peticiones
 		self.hiloServidorPrivado = threading.Thread(target=self.IniciaServidorPrivado,args=(ip1,))
 		self.hiloServidorPrivado.start()
