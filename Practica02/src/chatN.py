@@ -10,13 +10,13 @@ class Chat(QMainWindow,main_class):
 		self.setupUi(self)
 		
 
-	def getTexto(self): 				
-		msj = str(self.text_send.text())
+	def getTexto(self): 	
+		msj = str(self.text_send.toPlainText())
+		self.text_send.clear()
 		return msj
 
 	def setTexto(self,mensaje):
-		var = self.texr_recived.toPlainText()
-		self.texr_recived.setPlainText(var+'\n'+mensaje) #interfaz
+		self.text_receive.insertPlainText(mensaje) #interfaz
 		
 
 		

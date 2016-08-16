@@ -9,7 +9,7 @@ import time
 from chatN import Chat
 
 
-class Bob:
+class Bob():
 
 	def __init__(self,usr,ip1,ip2):
 		self.usr = usr
@@ -30,16 +30,20 @@ class Bob:
 			server = xmlrpclib.ServerProxy("http://"+self.ip1+":8000",allow_none=True) 
 			msj = server.vaciaBuffer()
 			if(len(msj)!=0):
-				#self.chat.setTexto(msj)
+				self.chat.setTexto(msj)
 				print 'MI mensaje es :'+msj
 		
  
 	def enviar(self):
-
-		if self.alice.ping():
-			msj = self.usr+' : '+str(self.chat.text_send.text())+'\n'
+		print 'Mando mensaje'
+		if(self.alice.ping()):
+			print 'Entramos'
+			msj = self.usr+' : '+str(self.chat.text_send.toPlainText())+'\n'
 			self.alice.enviarMensaje(msj)
 			self.chat.setTexto(msj)
-			return True
+			print 'se hizo ping con exito'
+		
+			
+	
 		
 		

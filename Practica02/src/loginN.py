@@ -25,9 +25,9 @@ class Ventana(QMainWindow,main_class):
 		usuario = str(self.text_usser.toPlainText())
 		ip1 = str(self.text_ip1.toPlainText())
 		ip2 = str(self.text_ip2.toPlainText())
-		usuario = 'Marco'
-		ip1 = '192.168.13.91'
-		ip2 = '192.168.13.200'
+		usuario = 'jose'
+		ip1 = 'localhost'
+		ip2 = 'localhost'
 		self.hiloSer = threading.Thread(target=self.IniciaServidor,args=(ip1,))
 		self.hiloSer.start()
 		self.c = Bob(usuario,ip1,ip2)
@@ -39,7 +39,11 @@ class Ventana(QMainWindow,main_class):
 		server.register_introspection_functions()
 		server.register_instance(Servidor())
 		print "Listening on port 8000..."
-		server.serve_forever()
+		try:
+			server.serve_forever()
+			print 'Use Control-C to exit'
+		except KeyboardInterrupt:
+			print 'Exiting'			
 		'''
 		try:
 			print 'Use Control-C to exit'
@@ -51,7 +55,7 @@ class Ventana(QMainWindow,main_class):
 class App(QApplication):
 	def __init__(self, *args):
 		QApplication.__init__(self, *args)
-		self.main = Ventana()
+		self.main = Ventana(None)
 		self.connect(self, SIGNAL("lastWindowClosed()"), self.byebye )
 		self.main.show()
 

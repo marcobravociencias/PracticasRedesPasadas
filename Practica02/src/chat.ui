@@ -27,16 +27,6 @@
      <string>Enviar</string>
     </property>
    </widget>
-   <widget class="QLineEdit" name="text_send">
-    <property name="geometry">
-     <rect>
-      <x>12</x>
-      <y>300</y>
-      <width>491</width>
-      <height>111</height>
-     </rect>
-    </property>
-   </widget>
    <widget class="QScrollArea" name="scrollArea">
     <property name="geometry">
      <rect>
@@ -58,7 +48,7 @@
        <height>239</height>
       </rect>
      </property>
-     <widget class="QTextEdit" name="texr_recived">
+     <widget class="QPlainTextEdit" name="text_receive">
       <property name="geometry">
        <rect>
         <x>0</x>
@@ -66,6 +56,10 @@
         <width>611</width>
         <height>241</height>
        </rect>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">font: italic 9pt &quot;DejaVu Serif&quot;;
+</string>
       </property>
      </widget>
     </widget>
@@ -88,17 +82,14 @@
      <string>Conectado con : </string>
     </property>
    </widget>
-   <widget class="QPushButton" name="boton_salir">
+   <widget class="QTextEdit" name="text_send">
     <property name="geometry">
      <rect>
-      <x>540</x>
-      <y>10</y>
-      <width>85</width>
-      <height>27</height>
+      <x>20</x>
+      <y>310</y>
+      <width>451</width>
+      <height>72</height>
      </rect>
-    </property>
-    <property name="text">
-     <string>Salir</string>
     </property>
    </widget>
   </widget>
