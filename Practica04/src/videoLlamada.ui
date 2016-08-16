@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>VideoLlamada</class>
+ <widget class="QWidget" name="VideoLlamada">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>623</width>
+    <height>504</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <widget class="QPushButton" name="termVide">
+   <property name="geometry">
+    <rect>
+     <x>470</x>
+     <y>460</y>
+     <width>151</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Terminar Llamada</string>
+   </property>
+  </widget>
+  <widget class="QPushButton" name="iniVide">
+   <property name="geometry">
+    <rect>
+     <x>350</x>
+     <y>460</y>
+     <width>111</width>
+     <height>41</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Inicia Llamada</string>
+   </property>
+  </widget>
+  <widget class="QGraphicsView" name="showVide">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>10</y>
+     <width>621</width>
+     <height>441</height>
+    </rect>
+   </property>
+  </widget>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
